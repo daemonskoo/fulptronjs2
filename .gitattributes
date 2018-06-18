@@ -1,1 +1,2 @@
 *.{png,mp4,jpg,gif} filter=lfs diff=lfs merge=lfs -text
+*.{png,jpg,jpeg,gif} filter=lfs diff=lfs merge=lfs -text
