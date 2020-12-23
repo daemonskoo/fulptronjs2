@@ -5,7 +5,7 @@ module.exports = {
 	args: false,
     execute(message, args) {
 		let roleList = message.guild.roles.cache.map(r => {
-			if (["Admins", 'Moderators', "@everyone", 'BrenBot', 'Mr. Fulp', 'Contributor', 'Nitro Booster', 'Advent Calendar'].indexOf(r.name) > -1 || r.name.endsWith('Collab'))
+			if (["Admin", 'Mod', "@everyone", 'BrenBot', 'Mr. Fulp', 'Contributor', 'Nitro Booster', 'Advent Calendar'].indexOf(r.name) > -1 || r.name.endsWith('Collab')) // TODO There's definitely a better way to do this. -Daemon
 				return "";
 			else
 				return r.name;
