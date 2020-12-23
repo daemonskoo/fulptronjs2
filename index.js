@@ -45,9 +45,7 @@ if (process.env.NGencKey) NGencKey = process.env.NGencKey;
 if (process.env.spreadsheetID) spreadsheetID = process.env.spreadsheetID;
 if (process.env.GOOGLE_API_KEY) GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
 if (process.env.MMappID) MMappID = process.env.MMappID;
-if (process.env.mongoURI) mongoURI = process.env.mongoURI;
-if (process.env.ngServerID) mongoURI = process.env.ngServerID;
-if (process.env.ngChannelID) mongoURI = process.env.ngChannelID;
+if (process.env.mongoURI) mongoURI = process.env.mongoURI; // TODO Add the extra shiz
 
 exports.prefix = prefix;
 exports.MMappID = MMappID;
@@ -156,7 +154,7 @@ client.on('ready', async () =>
 	let announcements = ngServer.channels.cache.find(announc => announc.id === ngChannelID);
 	announcements.messages.fetchPinned();
 
-	console.info("LUCKY GUILDS" + luckyGuilds);
+	console.info("LUCKY GUILDS " + luckyGuilds);
 
 	var memberShit = await keyv.get('fulptron');
 
@@ -217,12 +215,12 @@ client.on('guildMemberAdd', async member =>
 
 		console.log("SOMEONE JOINED NG SERVER??");
 
-		let infoPart = '*\nYou can use the command `fulpNG` to sign into the Newgrounds API, roles can be added in the <#' + ngChannelID '> and `fulpHelp` for more info)'
+		let infoPart = '*\nYou can use the command `fulpNG` to sign into the Newgrounds API, roles can be added in the <#' + ngChannelID + '> and `fulpHelp` for more info)'
 
 		let intro = ngRef[Math.floor(Math.random() * ngRef.length)];
 		intro = intro.replace('username',  "**" + member.user.username + "**");
 
-		return member.guild.channels.cache.find(channel => channel.id === guild.systemChannelID).send("*" + intro + infoPart); // TODO This guild.systemChannelID shiz might be totally busted - Deamon
+		return member.guild.channels.cache.find(channel => channel.id === member.guild.systemChannelID).send("*" + intro + infoPart); // TODO This guild.systemChannelID shiz might be totally busted - Deamon
 	}
 
 });
@@ -266,16 +264,16 @@ client.on('message', async message =>
 			let regShit = new RegExp('((\.png|\.jpg|\.jpeg)|newgrounds\.com\/(art|audio|portal)\/(view|listen))', 'gi');
 			if (message.attachments.size > 0 || regShit.test(message.content))
 			{
-				let picoSuffix = "";
-				if (Math.random() > 0.5)
-					picoSuffix = "pico"
+				//let picoSuffix = ""; // TODO Our server doesn't have pico emotes, this is temp because I'd prefer to do a more generic and dynamic method -Daemon
+				//if (Math.random() > 0.5)
+					//picoSuffix = "pico"
 
-				message.react(message.guild.emojis.cache.find(emoji => emoji.name === "0stars" + picoSuffix))
-				.then(react => message.react(message.guild.emojis.cache.find(emoji => emoji.name === "1star" + picoSuffix)))
-				.then(react => message.react(message.guild.emojis.cache.find(emoji => emoji.name === "2stars" + picoSuffix)))
-				.then(react => 	message.react(message.guild.emojis.cache.find(emoji => emoji.name === "3stars" + picoSuffix)))
-				.then(react => message.react(message.guild.emojis.cache.find(emoji => emoji.name === "4stars" + picoSuffix)))
-				.then(react => message.react(message.guild.emojis.cache.find(emoji => emoji.name === "5stars" + picoSuffix)));
+				message.react(message.guild.emojis.cache.find(emoji => emoji.name === "blam"))// + picoSuffix))
+				.then(react => message.react(message.guild.emojis.cache.find(emoji => emoji.name === "1star")))// + picoSuffix)))
+				.then(react => message.react(message.guild.emojis.cache.find(emoji => emoji.name === "2star")))// + picoSuffix)))
+				.then(react => 	message.react(message.guild.emojis.cache.find(emoji => emoji.name === "3star")))// + picoSuffix)))
+				.then(react => message.react(message.guild.emojis.cache.find(emoji => emoji.name === "4star")))// + picoSuffix)))
+				.then(react => message.react(message.guild.emojis.cache.find(emoji => emoji.name === "5star")));//+ picoSuffix)));
 			}
 		}
 	}
@@ -716,7 +714,7 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 
 	else if (command == 'source' || command == 'sourcecode' || command == 'github')
 	{
-		message.channel.send("Dig through my code on Github: \nhttps://github.com/DaemonPlus/fulptronjs2"); // TODO this should be more dynamic, for forks and whatnot - Daemon
+		message.channel.send("Dig through my code on Github: \nhttps://github.com/DaemonPlus/fulptronjs"); // TODO this should be more dynamic, for forks and whatnot - Daemon
 	}
 
 	// WARNING VERY DANGEROUS COMMAND THAT CAN RUIN THE BOT'S HOST IF IN THE WRONG HANDS
