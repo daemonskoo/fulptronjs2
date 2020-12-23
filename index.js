@@ -31,8 +31,8 @@ const nonDiscordUserMsg = 'you need to be using Discord to get this feature!';
 
 // NOTE IMPORTANT READ THIS
 // This line is commented in the master/heroku version, but it is needed if you were to run the code locally
-// let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID, mongoURI} = require('./config.json');
-let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID, mongoURI} = require('./config.example.json');
+// let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID, mongoURI, ngServerID, ngChannelID} = require('./config.json');
+let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID, mongoURI, ngServerID, ngChannelID} = require('./config.example.json');
 
 
 // THIS IS FOR HEROKU SHIT
@@ -46,6 +46,8 @@ if (process.env.spreadsheetID) spreadsheetID = process.env.spreadsheetID;
 if (process.env.GOOGLE_API_KEY) GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
 if (process.env.MMappID) MMappID = process.env.MMappID;
 if (process.env.mongoURI) mongoURI = process.env.mongoURI;
+if (process.env.ngServerID) mongoURI = process.env.ngServerID;
+if (process.env.ngChannelID) mongoURI = process.env.ngChannelID;
 
 exports.prefix = prefix;
 exports.MMappID = MMappID;
@@ -74,19 +76,14 @@ function prepPics()
 	console.log('dogl shit');
 	getImages('delete');
 	console.log('delete shit');
-	
-}
 
-// ID's for server, and announcement channel in NG server
-// used for caching shit and role reactions
-const ngServerID = '578313756015329281';
-const ngChannelID = '578314067752779796';
+}
 
 // when the client is ready, run this code
 // this event will trigger whenever your bot:
 // - finishes logging in
 // - reconnects after disconnecting
-client.on('ready', async () => 
+client.on('ready', async () =>
 {
 	prepPics();
 
@@ -177,14 +174,14 @@ client.on('ready', async () =>
 					"parameters": {},
 					}
 			};
-		
+
 			request.post(
 				'https://www.newgrounds.io/gateway_v3.php',
 				{ form: {input: JSON.stringify(inputData)} },
-				async function (error, response, body) 
+				async function (error, response, body)
 				{
 					let parsedResp = JSON.parse(response.body);
-					
+
 					console.log(apiUser + ": " + parsedResp.result.data.success);
 				});
 		});
@@ -203,7 +200,7 @@ client.on('guildMemberAdd', async member =>
 	if (member.guild.id == 283807027720093697)
 	{
 		let curRole = member.guild.roles.cache.find(darole => darole.name === "Flash Hole");
-			
+
 		member.roles.add(curRole);
 	}
 
@@ -220,12 +217,12 @@ client.on('guildMemberAdd', async member =>
 
 		console.log("SOMEONE JOINED NG SERVER??");
 
-		let infoPart = '*\nYou can use the command `fulpNG` to sign into the Newgrounds API, roles can be added in the <#578314067752779796> and `fulpHelp` for more info)'
+		let infoPart = '*\nYou can use the command `fulpNG` to sign into the Newgrounds API, roles can be added in the <#' + ngChannelID '> and `fulpHelp` for more info)'
 
 		let intro = ngRef[Math.floor(Math.random() * ngRef.length)];
 		intro = intro.replace('username',  "**" + member.user.username + "**");
 
-		return member.guild.channels.cache.find(channel => channel.id === '578313756015329283').send("*" + intro + infoPart);
+		return member.guild.channels.cache.find(channel => channel.id === guild.systemChannelID).send("*" + intro + infoPart); // TODO This guild.systemChannelID shiz might be totally busted - Deamon
 	}
 
 });
@@ -252,7 +249,7 @@ client.on("messageReactionRemove", (e, n) => {
             }
 });
 
-client.on('message', async message => 
+client.on('message', async message =>
 {
 	// Don't respond to messages made by the bot itself
 	if (message.author.id == client.user.id) return;
@@ -308,7 +305,7 @@ client.on('message', async message =>
 		{
 			console.log('Deleted message in ' + message.guild.name + " by " + message.author.username + ": " + message.content);
 			return message.delete();
-		}	
+		}
 	}
 
 	// if (message.content.includes())
@@ -328,7 +325,7 @@ client.on('message', async message =>
 		//`https://${usr}.newgrounds.com`
 
 		if(class === "level-${}-${}"){
-			
+
 		}
 	}*/
 
@@ -344,7 +341,7 @@ client.on('message', async message =>
 
 	console.log(args);
 	console.log(args.length);
-	
+
 
 
 	// uncomment when all the commands are implemented
@@ -361,7 +358,7 @@ client.on('message', async message =>
 			if (daCommand.args && !args.length)
 			{
 				let reply = "You didn't provide any arguments!"
-				
+
 				if (daCommand.usage)
 				{
 					reply += `\nThe proper usage would be: \`${prefix}${daCommand.name} ${daCommand.usage}\``
@@ -383,7 +380,7 @@ client.on('message', async message =>
 
 			daCommand.execute(message, args)
 		}
-		
+
 	} catch (err)
 	{
 		console.error(err);
@@ -394,7 +391,7 @@ client.on('message', async message =>
 
 	const serverQueue = isInGuild ? queue.get(message.guild.id) : null;
 		console.log(serverQueue);
-	
+
 	if (command == 'rolesetup')
 	{
 		if (!message.member.hasPermission('MANAGE_MESSAGES'))
@@ -427,8 +424,8 @@ client.on('message', async message =>
 		.then(react => daMessage.react("💩"));
 	}
 
-	
-	if (command == 'play' || command == 'join') 
+
+	if (command == 'play' || command == 'join')
 	{
 		if (!isInGuild) return;
 		if (!isDiscordUser)
@@ -469,26 +466,26 @@ client.on('message', async message =>
 			return message.channel.send('You do not have permission to speak in this channel, so it is likely you should not be using me either!');
 		}
 
-		if (url.match(/^https?:\/\/(www.youtube.com|youtube.com)\/playlist(.*)$/)) 
+		if (url.match(/^https?:\/\/(www.youtube.com|youtube.com)\/playlist(.*)$/))
 		{
 			const playlist = await youtube.getPlaylist(url);
 			const videos = await playlist.getVideos();
-			for (const video of Object.values(videos)) 
+			for (const video of Object.values(videos))
 			{
 				const video2 = await youtube.getVideoByID(video.id); // eslint-disable-line no-await-in-loop
 				await handleVideo(video2, message, channel, true); // eslint-disable-line no-await-in-loop
 			}
 			return message.channel.send(`✅ Playlist: **${playlist.title}** has been added to the queue!`);
-		} 
-		else 
+		}
+		else
 		{
-			try 
+			try
 			{
 				var video = await youtube.getVideo(url);
-			} 
-			catch (error) 
+			}
+			catch (error)
 			{
-				try 
+				try
 				{
 					var videos = await youtube.searchVideos(searchString, 10);
 					let index = 0;
@@ -498,7 +495,7 @@ ${videos.map(video2 => `**${++index} -** ${video2.title}`).join('\n')}
 **Please provide a value to select one of the search results ranging from 1-10.**
 					`);
 					// eslint-disable-next-line max-depth
-					try 
+					try
 					{
 						console.log("selection: " + message.content);
 
@@ -509,15 +506,15 @@ ${videos.map(video2 => `**${++index} -** ${video2.title}`).join('\n')}
 							time: 10000,
 							errors: ['time']
 						});
-					} 
+					}
 					catch (err) {
 						console.error(err);
 						return message.channel.send('No or invalid value entered, cancelling video selection.');
 					}
 					const videoIndex = parseInt(response.first().content);
 					var video = await youtube.getVideoByID(videos[videoIndex - 1].id);
-				} 
-				catch (err) 
+				}
+				catch (err)
 				{
 					console.error(err);
 					return message.channel.send('🆘 I could not obtain any search results.');
@@ -535,7 +532,7 @@ ${videos.map(video2 => `**${++index} -** ${video2.title}`).join('\n')}
 		{
 			return message.channel.send('You do not have permission to speak in this channel, so it is likely you should not be using me either!');
 		}
-		
+
 		if (!serverQueue) return message.channel.send('There is nothing playing that I could skip for you.');
 		console.log('skip has been used');
 		serverQueue.connection.dispatcher.end();
@@ -550,7 +547,7 @@ ${videos.map(video2 => `**${++index} -** ${video2.title}`).join('\n')}
 		{
 			return message.channel.send('You do not have permission to speak in this channel, so it is likely you should not be using me either!');
 		}
-		
+
 		if (!serverQueue) return message.channel.send('There is nothing playing that I could stop for you.');
 		serverQueue.songs = [];
 		serverQueue.connection.dispatcher.end();
@@ -566,7 +563,7 @@ ${videos.map(video2 => `**${++index} -** ${video2.title}`).join('\n')}
 		{
 			return message.channel.send('You do not have permission to speak in this channel, so it is likely you should not be using me either!');
 		}
-		
+
 		if (!serverQueue) return message.channel.send('There is nothing playing.');
 		if (!args[0]) return message.channel.send(`The current volume is: **${serverQueue.volume}**`);
 		if (args[0] > 200) return message.channel.send('pls do not use FulpTron for evil (max volume is 200)');
@@ -577,7 +574,7 @@ ${videos.map(video2 => `**${++index} -** ${video2.title}`).join('\n')}
 		if (!serverQueue) return message.channel.send('There is nothing playing.');
 		return message.channel.send(`🎶 Now playing: **${serverQueue.songs[0].title}**`);
 	} else if (command === 'queue' || command === 'q') {
-		if (!serverQueue) 
+		if (!serverQueue)
 			return message.channel.send('There is nothing playing.');
 		else
 			return message.channel.send(`
@@ -599,14 +596,14 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 		{
 			return message.channel.send('You do not have permission to speak in this channel, so it is likely you should not be using me either!');
 		}
-		
+
 		return message.channel.send('There is nothing playing.');
 	} else if (command === 'resume') {
 		if (!isDiscordUser)
 		{
 			return message.reply(nonDiscordUserMsg);
 		}
-		if (serverQueue && !serverQueue.playing) 
+		if (serverQueue && !serverQueue.playing)
 		{
 			serverQueue.playing = true;
 			serverQueue.connection.dispatcher.resume();
@@ -616,9 +613,9 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 	}
 	else if (command == 'discord')
 	{
-		message.channel.send("https://discord.gg/HzvnXfZ");
+		message.channel.send("https://discord.gg/HzvnXfZ"); // TODO what is this - Daemon
 	}
-	/* 
+	/*
 	if (command == "timeout" && message.author.role("mod"))
 	{
 		if (!isInGuild) return;
@@ -628,7 +625,7 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 		}
 
 		let usr = args[0];
-		
+
 		if (!message.guild.roles.exists("name", role))
 		{
 			return message.reply(`This server doesn't seem to have ${role} as a role... you should know that the roles are case sensitive!`)
@@ -674,7 +671,7 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 		client.user.setActivity(text, { type: 'WATCHING'});
 	}
 
-	else if (command == 'playing') 
+	else if (command == 'playing')
 	{
 		let text = args.slice(0).join(" ");
 			client.user.setActivity(text, { type: 'PLAYING' })
@@ -688,7 +685,7 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 
 		if (isNaN(max))
 			max = 20;
-		
+
 		message.channel.send(`🎲 You rolled a: ${Math.floor(Math.random() * (max - min + 1)) + min}`)
 
 	}
@@ -719,7 +716,7 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 
 	else if (command == 'source' || command == 'sourcecode' || command == 'github')
 	{
-		message.channel.send("Dig through my code on Github: \nhttps://github.com/ninjamuffin99/FulpTronJS");
+		message.channel.send("Dig through my code on Github: \nhttps://github.com/DaemonPlus/fulptronjs2"); // TODO this should be more dynamic, for forks and whatnot - Daemon
 	}
 
 	// WARNING VERY DANGEROUS COMMAND THAT CAN RUIN THE BOT'S HOST IF IN THE WRONG HANDS
@@ -774,7 +771,7 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 			  rp(options)
 			  .then(($) => {
 				  let songList = $('.itemlist.alternating').find('li');
-				  
+
 				  for (let i = 0; i < songList.toArray().length; i++)
 				  {
 					let daSong = songList.toArray()[i].children[1].children[1].attribs.href;
@@ -789,7 +786,7 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 			handleNGSongs(songUrl, message, message.member.voice.channel);
 		}
 
-		
+
 	}
 
 	// cheerio.js scraping help and info:
@@ -804,7 +801,7 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 
 		if (usr === undefined)
 			return message.reply("please input a newgrounds username!");
-	
+
 		// Buuilds the embed
 		let embed = new Discord.MessageEmbed()
 		.setURL(`https://${usr}.newgrounds.com`)
@@ -815,7 +812,7 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 		// Dont want this stinky footer image
 		// .setImage("https://desu-usergeneratedcontent.xyz/g/image/1499/80/1499801793392.png");
 
-		
+
 
 		const options = {
 			uri: `https://${usr}.newgrounds.com`,
@@ -823,7 +820,7 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 			  return cheerio.load(body);
 			}
 		  };
-		  
+
 		  rp(options)
 			.then(($) => {
 				let ngInfo = $('.user-header').text();
@@ -873,9 +870,9 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 						}
 						*/
 						listOfShit.push(shit)
-						
+
 					});
-						
+
 					for (var i=0; i < listOfShit.length; i++)
 					{
 						let dumb = listOfShit[i].trim();
@@ -899,7 +896,7 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 			  console.log(err);
 			  message.channel.send(`an error occured.. did you enter in an actual Newgrounds user??` );
 			});
-		
+
 	}
 
 	else if (command == "nglogout")
@@ -913,7 +910,7 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 		if (!isInGuild || !message.member.hasPermission('MANAGE_MESSAGES')) return;
 
 		var serverInfo = await keyv.get(message.guild.id);
-		
+
 
 		if (serverInfo == undefined)
 		{
@@ -938,7 +935,7 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 			return message.channel.send("Please input a word to blacklist!");
 
 		var serverInfo = await keyv.get(message.guild.id);
-		
+
 
 		if (serverInfo == undefined)
 		{
@@ -964,7 +961,7 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 			// console.log(message.author.username + ' EXISTS IN DATABASE');
 			isLoggedIn = JSON.parse(isLoggedIn);
 			// console.log(isLoggedIn);
-			
+
 
 			var inputData = {
 				"app_id": NGappID,
@@ -978,26 +975,26 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 
 			// console.log('DA INPUT');
 			// console.log(inputData);
-		
+
 			request.post(
 				'https://www.newgrounds.io/gateway_v3.php',
 				{ form: {input: JSON.stringify(inputData)} },
-				async function (error, response, body) 
+				async function (error, response, body)
 				{
 					let parsedResp = JSON.parse(response.body);
-					
+
 					console.log(JSON.parse(response.body));
 
-					
+
 					var memberInfo = await keyv.get(message.author.id);
 					memberInfo = JSON.parse(memberInfo);
-					
+
 					// NOTE actually fix this later
 
-					
+
 
 					console.log(parsedResp);
-					
+
 					signedIn = !parsedResp.result.data.session.expired && parsedResp.result.data.session.user;
 					if (signedIn)
 					{
@@ -1063,7 +1060,7 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 					"parameters": {},
 					}
 			};
-		
+
 			request.post(
 				'https://www.newgrounds.io/gateway_v3.php',
 				{ form: {input: JSON.stringify(inputData)} },
@@ -1071,7 +1068,7 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 					//console.log("BODY")
 					//console.log(body);
 					let parsedResp = JSON.parse(response.body);
-					
+
 					var ngUser = initMemberDate();
 
 					ngUser.discordUsername = message.author.username;
@@ -1088,7 +1085,7 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 					}
 					else
 						loggedInUsers = JSON.parse(loggedInUsers);
-					
+
 					loggedInUsers.usersAPI.push(message.author.id);
 					await keyv.set('fulptron', JSON.stringify(loggedInUsers));
 
@@ -1126,7 +1123,7 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 								});
 
 								let info = await transporter.sendMail({
-									from: '"FulpTronJS" <noreply-fulptron@miscworks.net>',
+									from: '"FulpTronJS" <noreply-fulptron@miscworks.net>', // TODO this ain't right... -Daemon
 									to: `${args[0]}`,
 									subject: 'FulpTron login',
 									text: `Hi,\nLooks like you asked to link your Newgrounds account with a FulpTron-managed Discord server.\nFulpTron will NOT have access to your Newgrounds password!!!\nFeel free to check the source code using the fulpSource command\nClick this link to sign into Newgrounds: ${parsedResp.result.data.session.passport_url}\nAnd then type in fulpNG again to get the roles!\n\nIf none of this rings a bell, disregard this email.`
@@ -1158,23 +1155,23 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 			);
 			console.log('boop');
 		}
-			
+
 	}
-	/* 
+	/*
 	if (command == "ngaura")
 	{
 		let usr = args[0];
 
 		if (usr === undefined)
 			return message.reply("please input a name");
-	
+
 		const options = {
 			uri: `https://${usr}.newgrounds.com`,
 			transform: function (body) {
 			  return cheerio.load(body);
 			}
 		  };
-		  
+
 		  rp(options)
 			.then(($) => {
 			  console.log($('.user-header-nav').text());
@@ -1183,7 +1180,7 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 			.catch((err) => {
 			  console.log(err);
 			});
-		
+
 	}
  	*/
 });
@@ -1205,7 +1202,7 @@ function handleNGSongs(songUrl, message, voicechannel, playlist=false)
 	//console.log(songUrl);
 
 	request.get(songUrl, {},
-	function (error, response, body) 
+	function (error, response, body)
 	{
 		let resp = JSON.parse(body);
 		//console.log(resp);
@@ -1218,13 +1215,13 @@ function handleNGSongs(songUrl, message, voicechannel, playlist=false)
 			title: resp.title,
 			url: resp.stream_url
 		};
-		
+
 		console.log(song.url)
 
-		
+
 		if (song.url.length <= 2)
 			return message.channel.send(`Song ${song.title} by ${resp.authors[0].name} cannot be played because they are not scouted yet!`)
-		
+
 
 		handleVideo(song, message, message.member.voice.channel, playlist);
 	});
@@ -1342,8 +1339,8 @@ async function play(guild, song) {
 	dispatcher.setVolumeLogarithmic(0.30);
 
 	}
-	
-	
+
+
 	serverQueue.textChannel.send(`🎶 Start playing: **${song.title}**`);
 }
 

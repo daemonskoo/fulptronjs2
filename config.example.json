@@ -1,14 +1,16 @@
 {
   "token": "insert your discord bot's token here",
   "clientID": "insert your discord app's client ID here",
-  "luckyGuilds": ["628006277984944167", "578313756015329281"],
-  "luckyChannels": [[],["578313839641231372", "578313897577021500", "578313914786250802", "583343626378280985", "578313930456170497"]],
+  "luckyGuilds": ["serverid1"],
+  "luckyChannels": [["channelid1", "channelid2"]],
   "prefix": "fulp",
-  "ownerID": "169167794649169920",
+  "ownerID": "",
   "NGappID": "",
   "NGencKey": "",
   "spreadsheetID": "",
-  "GOOGLE_API_KEY": "uhhh idk lol",
+  "GOOGLE_API_KEY": "",
   "MMappID": "",
-  "mongoURI": ""
+  "mongoURI": "",
+  "ngServerID": "",
+  "ngChannelID": ""
 }

@@ -1,4 +1,4 @@
-module.exports = {
+/*module.exports = { TODO THIS WHOLE THING IS FUCKNIG A NIGHTMARE OF UNMAINTAINABLE SECURITY RISK HOLY SHIT -Daemon
     name: "addrole",
     description: "Adds the input role",
     guildOnly: true,
@@ -24,9 +24,9 @@ module.exports = {
 		{
 			return message.reply(`you already have the ${curRole.name} role!`)
 		}
-			
+
 		message.member.roles.add(curRole);
         message.reply(`just got the ${curRole.name} role!`);
-        
+
     }
-}
+}*/

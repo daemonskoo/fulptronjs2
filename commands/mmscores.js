@@ -1,5 +1,5 @@
-module.exports = {
-    name: 'mmscores',
+/*module.exports = { // TODO I like this, can we make it more generic? Possibly for any game on Newgrounds that has a highscore?
+name: 'mmscores',
 	description: "Checks the top 20 scores of Monster Mashing!",
 	args: false,
     execute(message, args) {
@@ -8,11 +8,11 @@ module.exports = {
         const Discord = require('discord.js');
 
         var inputData = {
-			"app_id": MMappID,
+			"app_id": MMappID, // TODO It doesn't look like I have a way of getting client IDs of ng games pubically, so I might have to scrape it.
 			"debug": false,
 			"call": {
 				"component": "ScoreBoard.getScores",
-				"parameters": 
+				"parameters":
 				{
 					"id": 8004,
 					"limit": 20,
@@ -20,16 +20,16 @@ module.exports = {
 				},
 			}
 		};
-	
+
 		request.post(
 			'https://www.newgrounds.io/gateway_v3.php',
 			{ form: {input: JSON.stringify(inputData)} },
-            function (error, response, body) 
+            function (error, response, body)
             {
 				console.log("RESPONSE")
 				let parsedResp = JSON.parse(response.body);
 				console.log(parsedResp);
-				
+
 				let scorePos = 0;
 
 				let embed = new Discord.MessageEmbed()
@@ -61,5 +61,5 @@ module.exports = {
 
                 message.channel.send({embed});
             });
-    }            
-}
+    }
+}*/

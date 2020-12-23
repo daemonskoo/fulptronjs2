@@ -1,4 +1,4 @@
-module.exports = {
+/*module.exports = { // TODO This is pointless while the other command is such a nightmare
     name: "removerole",
     description: "Removes an input role",
     guildOnly: true,
@@ -22,7 +22,7 @@ module.exports = {
 		}
 
 		message.member.roles.remove(curRole).then(message.reply(`removed your ${curRole.name} role!`))
-	
-        
+
+
     }
-}
+}*/
