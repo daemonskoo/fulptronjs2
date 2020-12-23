@@ -1,5 +1,5 @@
-# FulpTronJS
-A stinky DiscordJS bot
+# fulptronjs2
+A slightly less stinky discord.js bot.
 
 FulpTron is 100% free to use or copy, as long as you follow the AGPL-3.0.
 
