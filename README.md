@@ -1,20 +1,24 @@
 # FulpTronJS
 A stinky DiscordJS bot
 
-FulpTron is 100% free to use or copy, preferably with a shoutout though. If you want to invite the official one to your servers, use this link:
-https://discordapp.com/oauth2/authorize?client_id=381604281968623617&scope=bot
+FulpTron is 100% free to use or copy, as long as you follow the AGPL-3.0.
 
 # COMMANDS
-A the full list can be found here: https://github.com/ninjamuffin99/FulpTronJS/blob/master/COMMANDS.md
+The full list can be found [here](COMMANDS.md).
 
 # ADDING FULPPICS
-FulpPics can be easily added by simply adding an image to the pics/fulp/ folder. If you have pic suggestions, you can either DM me the images on discord (ninja_muffin#9104) OR submit a pull request to this repository yourself. 
+FulpPics can be easily added by simply adding an image to the pics/fulp/ folder. If you have pic suggestions, you can submit a pull request to this repository yourself.
+
+# LICENSING
+All code and changes previous to the fork (2020-12-23) are MIT licensed, included with this repository in [LICENSE.old](LICENSE.old).
+
+All future changes are AGPL-3.0, included with this repository in [LICENSE](LICENSE). If you did not receive a copy of the AGPL-3.0, you can [here](https://www.gnu.org/licenses/agpl-3.0.html).
+
 ## CREDS
-Main shit by me, ninjamuffin99
+Future Fixes and current maintainer of AGPL-3.0 fork: [Daemon+](https://github.com/DaemonPlus)
 
-Additional code by: BrandyBuizel
+Original MIT code: [ninjamuffin99](https://github.com/ninjamuffin99)
 
-Music Bot code: https://github.com/Dev-Yukine/Music-Bot/
+Additional MIT code by: [BrandyBuizel](https://github.com/BrandyBuizel)
 
-Shoutouts to BrenTheMan for helping with the 24/7 hosting
-
+Music Bot code: https://github.com/DevYukine/Music-Bot/ (Original Repo appears to be missing)
