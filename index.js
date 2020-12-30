@@ -554,37 +554,10 @@ client.on("message", async (message) => {
       } catch (err) {
         try {
           var videos = await ytsr(searchString, { pages: 1 });
-
-          let index = 0;
-          var videoIndex = 1;
-          message.channel.send(
-            "__**Song selection:**__\n" +
-              `${videos.items
-                .map((video2) => `**${++index} -** ${video2.title}`)
-                .join("\n")}` +
-              "\n**Please provide a value to select one of the search results ranging from 1-10.**"
-          );
-          try {
-            var filter = (m) => m.content.startsWith("!vote");
-            var response = await message.channel
-              .awaitMessages(filter, {
-                max: 1,
-                time: 10000,
-                errors: ["time"],
-              })
-              .then((collected) =>
-                parseInt(collected.first().content.match(/\d+/g).join(""))
-              );
-          } catch (err) {
-            console.error(err);
-            return message.channel.send(
-              "No or invalid value entered, cancelling video selection."
-            );
-          }
           var video = {
-            id: videos.items[videoIndex - 1].id,
-            title: Util.escapeMarkdown(videos.items[videoIndex - 1].title),
-            url: videos.items[videoIndex - 1].url,
+            id: videos.items[0].id,
+            title: Util.escapeMarkdown(videos.items[0].title),
+            url: videos.items[0].url,
             onNG: false,
           };
         } catch (err) {
